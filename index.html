@@ -1,0 +1,65 @@
+<html>
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <style>
+    body {
+      background-color: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      color: #36BCF7;
+      font-size: 24px;
+      font-family: 'Courier New', Courier, monospace;
+    }
+    .text {
+      position: relative;
+    }
+    .spark {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: #fff;
+      border-radius: 50%;
+      opacity: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="text" id="typing">AI Evangelist | Dreaming to Make AGI a Reality</div>
+  <script>
+    // Typing Effect
+    const textElement = document.getElementById("typing");
+    const text = textElement.innerText;
+    textElement.innerText = "";
+    let index = 0;
+
+    function typeEffect() {
+      if (index < text.length) {
+        textElement.innerText += text[index];
+        createSpark();
+        index++;
+        setTimeout(typeEffect, 100);
+      }
+    }
+
+    // Spark Effect
+    function createSpark() {
+      const spark = document.createElement("div");
+      spark.classList.add("spark");
+      spark.style.left = `${Math.random() * 100}%`;
+      spark.style.top = `${Math.random() * 100}%`;
+      spark.style.animation = `spark-animation 1s forwards`;
+      document.body.appendChild(spark);
+
+      spark.addEventListener("animationend", () => {
+        spark.remove();
+      });
+    }
+
+    typeEffect();
+  </script>
+</body>
+</html>
