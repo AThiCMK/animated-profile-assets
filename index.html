@@ -11,19 +11,29 @@
       color: white;
       font-family: 'Courier New', Courier, monospace;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      overflow: hidden;
       margin: 0;
+      overflow: hidden;
     }
     .container {
       text-align: center;
+      position: relative;
     }
     h1 {
       font-size: 3rem;
       margin: 0;
       opacity: 0;
+    }
+    .lightning {
+      position: absolute;
+      width: 5px;
+      height: 60px;
+      background: #36BCF7;
+      opacity: 0;
+      animation: none;
     }
     .spark {
       position: absolute;
@@ -31,13 +41,29 @@
       height: 10px;
       background: #36BCF7;
       border-radius: 50%;
-      pointer-events: none;
+      opacity: 0;
+      animation: none;
+    }
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 10px #36BCF7; }
+      50% { box-shadow: 0 0 20px #36BCF7; }
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #36BCF7;
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      animation: glow 1.5s infinite;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1 id="animated-text">AI Evangelist | Dreaming to Make AGI a Reality</h1>
+    <button onclick="triggerAnimation()">Interact with Me</button>
   </div>
 
   <script>
@@ -50,8 +76,8 @@
     function typeText() {
       if (index < text.length) {
         textElement.innerText += text[index];
+        createLightning();
         index++;
-        createSpark();
         setTimeout(typeText, 100);
       } else {
         anime({
@@ -63,16 +89,30 @@
       }
     }
 
+    // Lightning Effect
+    function createLightning() {
+      const lightning = document.createElement('div');
+      lightning.classList.add('lightning');
+      lightning.style.left = `${Math.random() * window.innerWidth}px`;
+      lightning.style.top = `${Math.random() * window.innerHeight}px`;
+      document.body.appendChild(lightning);
+
+      anime({
+        targets: lightning,
+        opacity: [1, 0],
+        duration: 300,
+        easing: 'easeOutCubic',
+        complete: () => lightning.remove(),
+      });
+    }
+
     // Spark Effect
     function createSpark() {
       const spark = document.createElement('div');
       spark.classList.add('spark');
+      spark.style.left = `${Math.random() * window.innerWidth}px`;
+      spark.style.top = `${Math.random() * window.innerHeight}px`;
       document.body.appendChild(spark);
-
-      const x = Math.random() * window.innerWidth;
-      const y = Math.random() * window.innerHeight;
-      spark.style.left = `${x}px`;
-      spark.style.top = `${y}px`;
 
       anime({
         targets: spark,
@@ -84,7 +124,14 @@
       });
     }
 
-    // Start Animation
+    // Button Interaction
+    function triggerAnimation() {
+      for (let i = 0; i < 5; i++) {
+        createSpark();
+      }
+    }
+
+    // Start Typing Animation
     typeText();
   </script>
 </body>
