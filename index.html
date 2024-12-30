@@ -1,65 +1,91 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Animated Profile</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
   <style>
     body {
-      background-color: #000;
+      background-color: #0f0f0f;
+      color: white;
+      font-family: 'Courier New', Courier, monospace;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      margin: 0;
       overflow: hidden;
-      color: #36BCF7;
-      font-size: 24px;
-      font-family: 'Courier New', Courier, monospace;
+      margin: 0;
     }
-    .text {
-      position: relative;
+    .container {
+      text-align: center;
+    }
+    h1 {
+      font-size: 3rem;
+      margin: 0;
+      opacity: 0;
     }
     .spark {
       position: absolute;
       width: 10px;
       height: 10px;
-      background: #fff;
+      background: #36BCF7;
       border-radius: 50%;
-      opacity: 0;
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
-  <div class="text" id="typing">AI Evangelist | Dreaming to Make AGI a Reality</div>
+  <div class="container">
+    <h1 id="animated-text">AI Evangelist | Dreaming to Make AGI a Reality</h1>
+  </div>
+
   <script>
-    // Typing Effect
-    const textElement = document.getElementById("typing");
+    // Typing Animation
+    const textElement = document.getElementById('animated-text');
     const text = textElement.innerText;
-    textElement.innerText = "";
+    textElement.innerText = '';
     let index = 0;
 
-    function typeEffect() {
+    function typeText() {
       if (index < text.length) {
         textElement.innerText += text[index];
-        createSpark();
         index++;
-        setTimeout(typeEffect, 100);
+        createSpark();
+        setTimeout(typeText, 100);
+      } else {
+        anime({
+          targets: textElement,
+          opacity: [0, 1],
+          duration: 1000,
+          easing: 'easeInOutQuad',
+        });
       }
     }
 
     // Spark Effect
     function createSpark() {
-      const spark = document.createElement("div");
-      spark.classList.add("spark");
-      spark.style.left = `${Math.random() * 100}%`;
-      spark.style.top = `${Math.random() * 100}%`;
-      spark.style.animation = `spark-animation 1s forwards`;
+      const spark = document.createElement('div');
+      spark.classList.add('spark');
       document.body.appendChild(spark);
 
-      spark.addEventListener("animationend", () => {
-        spark.remove();
+      const x = Math.random() * window.innerWidth;
+      const y = Math.random() * window.innerHeight;
+      spark.style.left = `${x}px`;
+      spark.style.top = `${y}px`;
+
+      anime({
+        targets: spark,
+        scale: [1, 3],
+        opacity: [1, 0],
+        duration: 800,
+        easing: 'easeOutQuad',
+        complete: () => spark.remove(),
       });
     }
 
-    typeEffect();
+    // Start Animation
+    typeText();
   </script>
 </body>
 </html>
